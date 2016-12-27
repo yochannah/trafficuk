@@ -85,7 +85,7 @@ function toggleStar(postRef, uid) {
 /**
  * Creates a post element.
  */
-function createPostElement(postId, title, text, author, authorId, authorPic) {
+function createPostElement(postId, numVehicles, speedLimit, date) {
   var uid = firebase.auth().currentUser.uid;
 
   var html =
@@ -95,25 +95,8 @@ function createPostElement(postId, title, text, author, authorId, authorPic) {
           '<div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">' +
             '<h4 class="mdl-card__title-text"></h4>' +
           '</div>' +
-          '<div class="header">' +
-            '<div>' +
-              '<div class="avatar"></div>' +
-              '<div class="username mdl-color-text--black"></div>' +
-            '</div>' +
-          '</div>' +
-          '<span class="star">' +
-            '<div class="not-starred material-icons">star_border</div>' +
-            '<div class="starred material-icons">star</div>' +
-            '<div class="star-count">0</div>' +
-          '</span>' +
-          '<div class="text"></div>' +
-          '<div class="comments-container"></div>' +
-          '<form class="add-comment" action="#">' +
-            '<div class="mdl-textfield mdl-js-textfield">' +
-              '<input class="mdl-textfield__input new-comment" type="text">' +
-              '<label class="mdl-textfield__label">Comment...</label>' +
-            '</div>' +
-          '</form>' +
+          '<div class="text">Speed limit: ' + speedLimit + '</div>' +
+          '<div class="text">Number of vehicles: ' + numVehicles + '</div>' +
         '</div>' +
       '</div>';
 
@@ -121,75 +104,9 @@ function createPostElement(postId, title, text, author, authorId, authorPic) {
   var div = document.createElement('div');
   div.innerHTML = html;
   var postElement = div.firstChild;
-  if (componentHandler) {
-    componentHandler.upgradeElements(postElement.getElementsByClassName('mdl-textfield')[0]);
-  }
-
-  var addCommentForm = postElement.getElementsByClassName('add-comment')[0];
-  var commentInput = postElement.getElementsByClassName('new-comment')[0];
-  var star = postElement.getElementsByClassName('starred')[0];
-  var unStar = postElement.getElementsByClassName('not-starred')[0];
 
   // Set values.
-  postElement.getElementsByClassName('text')[0].innerText = text;
-  postElement.getElementsByClassName('mdl-card__title-text')[0].innerText = title;
-  postElement.getElementsByClassName('username')[0].innerText = author || 'Anonymous';
-  postElement.getElementsByClassName('avatar')[0].style.backgroundImage = 'url("' +
-      (authorPic || './silhouette.jpg') + '")';
-
-  // Listen for comments.
-  // [START child_event_listener_recycler]
-  var commentsRef = firebase.database().ref('post-comments/' + postId);
-  commentsRef.on('child_added', function(data) {
-    addCommentElement(postElement, data.key, data.val().text, data.val().author);
-  });
-
-  commentsRef.on('child_changed', function(data) {
-    setCommentValues(postElement, data.key, data.val().text, data.val().author);
-  });
-
-  commentsRef.on('child_removed', function(data) {
-    deleteComment(postElement, data.key);
-  });
-  // [END child_event_listener_recycler]
-
-  // Listen for likes counts.
-  // [START post_value_event_listener]
-  var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
-  starCountRef.on('value', function(snapshot) {
-    updateStarCount(postElement, snapshot.val());
-  });
-  // [END post_value_event_listener]
-
-  // Listen for the starred status.
-  var starredStatusRef = firebase.database().ref('posts/' + postId + '/stars/' + uid)
-  starredStatusRef.on('value', function(snapshot) {
-    updateStarredByCurrentUser(postElement, snapshot.val());
-  });
-
-  // Keep track of all Firebase reference on which we are listening.
-  listeningFirebaseRefs.push(commentsRef);
-  listeningFirebaseRefs.push(starCountRef);
-  listeningFirebaseRefs.push(starredStatusRef);
-
-  // Create new comment.
-  addCommentForm.onsubmit = function(e) {
-    e.preventDefault();
-    createNewComment(postId, firebase.auth().currentUser.displayName, uid, commentInput.value);
-    commentInput.value = '';
-    commentInput.parentElement.MaterialTextfield.boundUpdateClassesHandler();
-  };
-
-  // Bind starring action.
-  var onStarClicked = function() {
-    var globalPostRef = firebase.database().ref('/posts/' + postId);
-    var userPostRef = firebase.database().ref('/user-posts/' + authorId + '/' + postId);
-    toggleStar(globalPostRef, uid);
-    toggleStar(userPostRef, uid);
-  };
-  unStar.onclick = onStarClicked;
-  star.onclick = onStarClicked;
-
+  postElement.getElementsByClassName('mdl-card__title-text')[0].innerText = date;
   return postElement;
 }
 
@@ -264,19 +181,20 @@ function startDatabaseQueries() {
   var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
   // [END my_top_posts_query]
   // [START recent_posts_query]
-  var recentPostsRef = firebase.database().ref('posts').limitToLast(100);
+    var recentPostsRef = firebase.database().ref('2015').limitToFirst(30);
   // [END recent_posts_query]
   var userPostsRef = firebase.database().ref('user-posts/' + myUserId);
 
   var fetchPosts = function(postsRef, sectionElement) {
     postsRef.on('child_added', function(data) {
       var author = data.val().author || 'Anonymous';
+      console.log(data.val());
       var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
       containerElement.insertBefore(
-          createPostElement(data.key, data.val().title, data.val().body, author, data.val().uid, data.val().authorPic),
+          createPostElement(data.key, data.val().Number_of_Vehicles, data.val().Speed_limit, data.val().Date),
           containerElement.firstChild);
     });
-    postsRef.on('child_changed', function(data) {	
+    postsRef.on('child_changed', function(data) {
 		var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
 		var postElement = containerElement.getElementsByClassName('post-' + data.key)[0];
 		postElement.getElementsByClassName('mdl-card__title-text')[0].innerText = data.val().title;
