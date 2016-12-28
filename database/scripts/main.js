@@ -33,6 +33,7 @@ var myTopPostsMenuButton = document.getElementById('menu-my-top-posts');
 var listeningFirebaseRefs = [];
 
 var dropdownVals = {police : 35};
+var db = {};
 
 /**
  * Saves a new post to the Firebase DB.
@@ -113,20 +114,21 @@ function createPostElement(postId, numVehicles, speedLimit, date, policeForce) {
   return postElement;
 }
 
-
 var dropdowns = ["police"],
-dropdownRefs = [], thisRef, thisElem, newOption;
+dropdownRefs = {}, thisRef, thisElem, newOption;
 function populateDropdowns() {
   dropdowns.map(function(dropdown){
     thisRef = firebase.database().ref(dropdown);
     thisElem = document.getElementById(dropdown);
+    db[dropdown] = {};
 
     //populate with values
     thisRef.on('child_added', function(ref) {
       newOption = document.createElement('option');
-      newOption.innerText = ref.val().name;
-      newOption.setAttribute("value",ref.val().code);
-      thisElem.appendChild(newOption)
+      newOption.innerText = ref.val();
+      newOption.setAttribute("value",ref.key);
+      thisElem.appendChild(newOption);
+      db[dropdown][ref.key] = ref.val();
     });
 
     //listen for changes:
@@ -135,7 +137,7 @@ function populateDropdowns() {
       startDatabaseQueries();
     });
 
-    dropdownRefs.push(thisRef);
+    dropdownRefs[dropdown] = thisRef;
   });
 }
 
@@ -148,7 +150,7 @@ function startDatabaseQueries() {
   var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
   // [END my_top_posts_query]
   // [START recent_posts_query]
-    var recentPostsRef = firebase.database().ref('2015').orderByChild('Police_Force').limitToLast(30).equalTo(dropdownVals.police); //this is cambs
+    var recentPostsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(30).equalTo(dropdownVals.police); //this is cambs
   // [END recent_posts_query]
   var userPostsRef = firebase.database().ref('user-posts/' + myUserId);
 
@@ -171,6 +173,7 @@ function startDatabaseQueries() {
 		postElement.getElementsByClassName('star-count')[0].innerText = data.val().starCount;
     });
     postsRef.on('child_removed', function(data) {
+      console.log('FIX ME');
 		var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
 		var post = containerElement.getElementsByClassName('post-' + data.key)[0];
 	    post.parentElement.removeChild(post);
