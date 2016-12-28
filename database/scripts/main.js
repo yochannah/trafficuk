@@ -35,55 +35,6 @@ var listeningFirebaseRefs = [];
 var dropdownVals = {police : 35};
 var db = {};
 
-/**
- * Saves a new post to the Firebase DB.
- */
-// [START write_fan_out]
-function writeNewPost(uid, username, picture, title, body) {
-  // A post entry.
-  var postData = {
-    author: username,
-    uid: uid,
-    body: body,
-    title: title,
-    starCount: 0,
-    authorPic: picture
-  };
-
-  // Get a key for a new Post.
-  var newPostKey = firebase.database().ref().child('posts').push().key;
-
-  // Write the new post's data simultaneously in the posts list and the user's post list.
-  var updates = {};
-  updates['/posts/' + newPostKey] = postData;
-  updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-
-  return firebase.database().ref().update(updates);
-}
-// [END write_fan_out]
-
-/**
- * Star/unstar post.
- */
-// [START post_stars_transaction]
-function toggleStar(postRef, uid) {
-  postRef.transaction(function(post) {
-    if (post) {
-      if (post.stars && post.stars[uid]) {
-        post.starCount--;
-        post.stars[uid] = null;
-      } else {
-        post.starCount++;
-        if (!post.stars) {
-          post.stars = {};
-        }
-        post.stars[uid] = true;
-      }
-    }
-    return post;
-  });
-}
-// [END post_stars_transaction]
 
 /**
  * Creates a post element.
@@ -147,15 +98,9 @@ function populateDropdowns() {
  * Starts listening for new posts and populates posts lists.
  */
 function startDatabaseQueries() {
-  // [START my_top_posts_query]
-  var myUserId = firebase.auth().currentUser.uid;
-  var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
-  // [END my_top_posts_query]
-  // [START recent_posts_query]
+
     var recentPostsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(30).equalTo(dropdownVals.police);
     console.log(dropdownVals.police);
-  // [END recent_posts_query]
-  var userPostsRef = firebase.database().ref('user-posts/' + myUserId);
 
   var fetchPosts = function(postsRef, sectionElement) {
     postsRef.on('child_added', function(data) {
@@ -203,32 +148,11 @@ function cleanupUi() {
 
 }
 
-/**
- * The ID of the currently signed-in User. We keep track of this to detect Auth state change events that are just
- * programmatic token refresh but not a User status change.
- */
-var currentUID;
-
 populateDropdowns();
   startDatabaseQueries();
 
 
-/**
- * Creates a new post for the current user.
- */
-function newPostForCurrentUser(title, text) {
-  // [START single_value_read]
-  var userId = firebase.auth().currentUser.uid;
-  return firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
-    var username = snapshot.val().username;
-    // [START_EXCLUDE]
-    return writeNewPost(firebase.auth().currentUser.uid, username,
-        firebase.auth().currentUser.photoURL,
-        title, text);
-    // [END_EXCLUDE]
-  });
-  // [END single_value_read]
-}
+
 
 /**
  * Displays the given section element and changes styling of the given button.
@@ -253,7 +177,5 @@ function showSection(sectionElement, buttonElement) {
 // Bindings on load.
 window.addEventListener('load', function() {
 
-  // Listen for auth state changes
-  firebase.auth().onAuthStateChanged(onAuthStateChanged);
 
 }, false);
