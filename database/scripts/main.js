@@ -133,7 +133,7 @@ function populateDropdowns() {
 
     //listen for changes:
     thisElem.addEventListener("change",function (e){
-      dropdownVals[dropdown] = e.target[e.target.selectedIndex].value;
+      dropdownVals[dropdown] = parseInt(e.target[e.target.selectedIndex].value,10);
       startDatabaseQueries();
     });
 
@@ -150,14 +150,14 @@ function startDatabaseQueries() {
   var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
   // [END my_top_posts_query]
   // [START recent_posts_query]
-    var recentPostsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(30).equalTo(dropdownVals.police); //this is cambs
+    var recentPostsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(30).equalTo(dropdownVals.police);
+    console.log(dropdownVals.police);
   // [END recent_posts_query]
   var userPostsRef = firebase.database().ref('user-posts/' + myUserId);
 
   var fetchPosts = function(postsRef, sectionElement) {
     postsRef.on('child_added', function(data) {
       var author = data.val().author || 'Anonymous';
-      //console.log(data.val());
       var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
       containerElement.insertBefore(
           createPostElement(data.key, data.val().Number_of_Vehicles, data.val().Speed_limit, data.val().Date,data.val().Police_Force),
