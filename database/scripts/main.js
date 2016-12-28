@@ -101,10 +101,8 @@ function startDatabaseQueries() {
     var recentPostsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(30).equalTo(dropdownVals.police);
     console.log(dropdownVals.police);
 
-  var fetchPosts = function(postsRef, sectionElement) {
-    console.log("fetchposts");
+  var fetchAccidents = function(postsRef, sectionElement) {
     postsRef.on('child_added', function(data) {
-      console.log("child added");
       var author = data.val().author || 'Anonymous';
       var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
       containerElement.insertBefore(
@@ -131,9 +129,7 @@ function startDatabaseQueries() {
   };
 
   // Fetching and displaying all posts of each sections.
-  console.log(1);
-  fetchPosts(recentPostsRef, recentPostsSection);
-  console.log(2);
+  fetchAccidents(recentPostsRef, recentPostsSection);
 
   // Keep track of all Firebase refs we are listening to.
 
