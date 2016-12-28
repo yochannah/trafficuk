@@ -6,7 +6,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{
     accessToken: 'pk.eyJ1IjoieW9jaGFubmFoIiwiYSI6Iko5TU1xcW8ifQ.AlR1faR7rfR1CoJRyIPEAg'
 }).addTo(mymap);
 
-var bounds = [];
+var bounds = [], markers = [];
 function addMarker(marker) {
     //assume array of objs with lats and longs and other fun stuff
     var lat = marker.Latitude,
@@ -14,9 +14,19 @@ function addMarker(marker) {
     var circle = L.circle([lat, long], {
         color: 'red',
         fillColor: '#f03',
-        fillOpacity: 0.5,
+        fillOpacity: 0.4,
         radius: 500
     }).addTo(mymap);
     bounds.push([lat, long]);
+    markers[marker.Accident_Index] = circle;
     mymap.fitBounds(bounds);
 }
+
+function removeMarker(marker) {
+  mymap.removeLayer(marker);
+  delete markers[marker];
+}
+
+function removeAllMarkers() {for(marker in markers) {
+  removeMarker(marker);
+}}

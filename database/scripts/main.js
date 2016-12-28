@@ -99,7 +99,7 @@ function createPostElement(postId, numVehicles, speedLimit, date, policeForce) {
             '<h4 class="mdl-card__title-text"></h4>' +
           '</div>' +
           '<div class="text">Speed limit: ' + speedLimit + '</div>' +
-          '<div class="text">Police: ' + policeForce + '</div>' +
+          '<div class="text">Police: ' + db.police[parseInt(policeForce,10)] + '</div>' +
           '<div class="text">Number of vehicles: ' + numVehicles + '</div>' +
         '</div>' +
       '</div>';
@@ -133,6 +133,8 @@ function populateDropdowns() {
 
     //listen for changes:
     thisElem.addEventListener("change",function (e){
+      listeningFirebaseRefs.map(function(ref){ ref.off();});
+      removeAllMarkers();
       dropdownVals[dropdown] = parseInt(e.target[e.target.selectedIndex].value,10);
       startDatabaseQueries();
     });
@@ -174,7 +176,8 @@ function startDatabaseQueries() {
 		postElement.getElementsByClassName('star-count')[0].innerText = data.val().starCount;
     });
     postsRef.on('child_removed', function(data) {
-      console.log('FIX ME');
+      console.log('FIX ME - removed');
+      removeMarker(data.val());
 		var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
 		var post = containerElement.getElementsByClassName('post-' + data.key)[0];
 	    post.parentElement.removeChild(post);
@@ -219,8 +222,8 @@ function onAuthStateChanged(user) {
   if (user) {
     currentUID = user.uid;
   //  writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+  populateDropdowns();
     startDatabaseQueries();
-    populateDropdowns();
   } else {
     // Set currentUID to null.
     currentUID = null;

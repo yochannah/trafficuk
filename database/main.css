@@ -22,7 +22,7 @@ a {
     color: #039BE5;
 }
 #mapid {
-    height: 180px;
+    height: 50vh;
 }
 .posts-container {
     display: flex;
