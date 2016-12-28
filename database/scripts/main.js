@@ -131,9 +131,9 @@ function startDatabaseQueries() {
   };
 
   // Fetching and displaying all posts of each sections.
-
+  console.log(1);
   fetchPosts(recentPostsRef, recentPostsSection);
-
+  console.log(2);
 
   // Keep track of all Firebase refs we are listening to.
 
