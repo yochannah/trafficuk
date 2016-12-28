@@ -209,27 +209,8 @@ function cleanupUi() {
  */
 var currentUID;
 
-/**
- * Triggers every time there is a change in the Firebase auth state (i.e. user signed-in or user signed out).
- */
-function onAuthStateChanged(user) {
-  // We ignore token refresh events.
-  if (user && currentUID === user.uid) {
-    return;
-  }
-
-  cleanupUi();
-  if (user) {
-    currentUID = user.uid;
-  //  writeUserData(user.uid, user.displayName, user.email, user.photoURL);
-  populateDropdowns();
-    startDatabaseQueries();
-  } else {
-    // Set currentUID to null.
-    currentUID = null;
-
-  }
-}
+populateDropdowns();
+  startDatabaseQueries();
 
 
 /**
