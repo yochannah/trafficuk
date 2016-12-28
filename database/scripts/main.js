@@ -237,16 +237,7 @@ function writeUserData(userId, name, email, imageUrl) {
  * Cleanups the UI and removes all Firebase listeners.
  */
 function cleanupUi() {
-  // Remove all previously displayed posts.
-  topUserPostsSection.getElementsByClassName('posts-container')[0].innerHTML = '';
-  recentPostsSection.getElementsByClassName('posts-container')[0].innerHTML = '';
-  userPostsSection.getElementsByClassName('posts-container')[0].innerHTML = '';
 
-  // Stop all currently listening Firebase listeners.
-  listeningFirebaseRefs.forEach(function(ref) {
-    ref.off();
-  });
-  listeningFirebaseRefs = [];
 }
 
 /**
@@ -316,43 +307,7 @@ function showSection(sectionElement, buttonElement) {
 // Bindings on load.
 window.addEventListener('load', function() {
 
-
-  // Bind Sign out button.
-  signOutButton.addEventListener('click', function() {
-    firebase.auth().signOut();
-  });
-
   // Listen for auth state changes
   firebase.auth().onAuthStateChanged(onAuthStateChanged);
 
-  // Saves message on form submit.
-  messageForm.onsubmit = function(e) {
-    e.preventDefault();
-    var text = messageInput.value;
-    var title = titleInput.value;
-    if (text && title) {
-      newPostForCurrentUser(title, text).then(function() {
-        myPostsMenuButton.click();
-      });
-      messageInput.value = '';
-      titleInput.value = '';
-    }
-  };
-
-  // Bind menu buttons.
-  recentMenuButton.onclick = function() {
-    showSection(recentPostsSection, recentMenuButton);
-  };
-  myPostsMenuButton.onclick = function() {
-    showSection(userPostsSection, myPostsMenuButton);
-  };
-  myTopPostsMenuButton.onclick = function() {
-    showSection(topUserPostsSection, myTopPostsMenuButton);
-  };
-  addButton.onclick = function() {
-    showSection(addPost);
-    messageInput.value = '';
-    titleInput.value = '';
-  };
-  recentMenuButton.onclick();
 }, false);
