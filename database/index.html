@@ -12,73 +12,81 @@
   limitations under the License
 -->
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Demonstrates the use of Google Cloud Database with a Firebase DB">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Database Quickstart</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Demonstrates the use of Google Cloud Database with a Firebase DB">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Database Quickstart</title>
 
-  <!-- Disable tap highlight on IE -->
-  <meta name="msapplication-tap-highlight" content="no">
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no">
 
-  <!-- Add to homescreen for Chrome on Android -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Firebase Database Quickstart">
-  <meta name="theme-color" content="#303F9F">
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Firebase Database Quickstart">
+    <meta name="theme-color" content="#303F9F">
 
-  <!-- Add to homescreen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Firebase Database Quickstart">
-  <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Firebase Database Quickstart">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
 
-  <!-- Tile icon for Win8 -->
-  <meta name="msapplication-TileColor" content="#3372DF">
-  <meta name="msapplication-navbutton-color" content="#303F9F">
+    <!-- Tile icon for Win8 -->
+    <meta name="msapplication-TileColor" content="#3372DF">
+    <meta name="msapplication-navbutton-color" content="#303F9F">
 
-  <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="main.css">
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
-  <script charset="utf-8">
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyD3a2w_kFitqdFEbzFUgPX5rEJQRmh31e8",
-    authDomain: "traffic-uk.firebaseapp.com",
-    databaseURL: "https://traffic-uk.firebaseio.com",
-    storageBucket: "traffic-uk.appspot.com",
-    messagingSenderId: "446491661068"
-  };
-  firebase.initializeApp(config);
-  </script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+    <script charset="utf-8">
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyD3a2w_kFitqdFEbzFUgPX5rEJQRmh31e8",
+            authDomain: "traffic-uk.firebaseapp.com",
+            databaseURL: "https://traffic-uk.firebaseio.com",
+            storageBucket: "traffic-uk.appspot.com",
+            messagingSenderId: "446491661068"
+        };
+        firebase.initializeApp(config);
+    </script>
 
 </head>
+
 <body>
-<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
-  <!-- Header section containing logo and menu -->
-  <header class="header mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
+        <!-- Header section containing logo and menu -->
+        <header class="header mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
 
 
-    <!-- Navigation Bar -->
-    <div class="tab mdl-layout__header-row mdl-color--light-blue-600">
+            <!-- Navigation Bar -->
+            <div class="filters">
+                
+                    <label>Police force
+                        <select id="police">
+                            <option disabled selected>Select one</option>
+                        </select>
+                    </label>
 
+            </div>
+        </header>
+
+        <main class="mdl-layout__content mdl-color--grey-100">
+
+            <!-- Show a list of recent posts -->
+            <section class="mdl-grid content" id="recent-posts-list">
+                <div class="posts-container mdl-cell mdl-cell--12-col mdl-grid">
+                </div>
+            </section>
+
+        </main>
     </div>
-  </header>
 
-  <main class="mdl-layout__content mdl-color--grey-100">
-
-
-    <!-- Show a list of recent posts -->
-    <section class="mdl-grid content" id="recent-posts-list">
-      <div class="posts-container mdl-cell mdl-cell--12-col mdl-grid">
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<script src="scripts/main.js"></script>
+    <script src="scripts/main.js"></script>
 </body>
+
 </html>

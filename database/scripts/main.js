@@ -32,6 +32,8 @@ var myPostsMenuButton = document.getElementById('menu-my-posts');
 var myTopPostsMenuButton = document.getElementById('menu-my-top-posts');
 var listeningFirebaseRefs = [];
 
+var dropdownVals = {police : 35};
+
 /**
  * Saves a new post to the Firebase DB.
  */
@@ -85,7 +87,7 @@ function toggleStar(postRef, uid) {
 /**
  * Creates a post element.
  */
-function createPostElement(postId, numVehicles, speedLimit, date) {
+function createPostElement(postId, numVehicles, speedLimit, date, policeForce) {
   var uid = firebase.auth().currentUser.uid;
 
   var html =
@@ -96,6 +98,7 @@ function createPostElement(postId, numVehicles, speedLimit, date) {
             '<h4 class="mdl-card__title-text"></h4>' +
           '</div>' +
           '<div class="text">Speed limit: ' + speedLimit + '</div>' +
+          '<div class="text">Police: ' + policeForce + '</div>' +
           '<div class="text">Number of vehicles: ' + numVehicles + '</div>' +
         '</div>' +
       '</div>';
@@ -110,66 +113,30 @@ function createPostElement(postId, numVehicles, speedLimit, date) {
   return postElement;
 }
 
-/**
- * Writes a new comment for the given post.
- */
-function createNewComment(postId, username, uid, text) {
-  firebase.database().ref('post-comments/' + postId).push({
-    text: text,
-    author: username,
-    uid: uid
+
+var dropdowns = ["police"],
+dropdownRefs = [], thisRef, thisElem, newOption;
+function populateDropdowns() {
+  dropdowns.map(function(dropdown){
+    thisRef = firebase.database().ref(dropdown);
+    thisElem = document.getElementById(dropdown);
+
+    //populate with values
+    thisRef.on('child_added', function(ref) {
+      newOption = document.createElement('option');
+      newOption.innerText = ref.val().name;
+      newOption.setAttribute("value",ref.val().code);
+      thisElem.appendChild(newOption)
+    });
+
+    //listen for changes:
+    thisElem.addEventListener("change",function (e){
+      dropdownVals[dropdown] = e.target[e.target.selectedIndex].value;
+      startDatabaseQueries();
+    });
+
+    dropdownRefs.push(thisRef);
   });
-}
-
-/**
- * Updates the starred status of the post.
- */
-function updateStarredByCurrentUser(postElement, starred) {
-  if (starred) {
-    postElement.getElementsByClassName('starred')[0].style.display = 'inline-block';
-    postElement.getElementsByClassName('not-starred')[0].style.display = 'none';
-  } else {
-    postElement.getElementsByClassName('starred')[0].style.display = 'none';
-    postElement.getElementsByClassName('not-starred')[0].style.display = 'inline-block';
-  }
-}
-
-/**
- * Updates the number of stars displayed for a post.
- */
-function updateStarCount(postElement, nbStart) {
-  postElement.getElementsByClassName('star-count')[0].innerText = nbStart;
-}
-
-/**
- * Creates a comment element and adds it to the given postElement.
- */
-function addCommentElement(postElement, id, text, author) {
-  var comment = document.createElement('div');
-  comment.classList.add('comment-' + id);
-  comment.innerHTML = '<span class="username"></span><span class="comment"></span>';
-  comment.getElementsByClassName('comment')[0].innerText = text;
-  comment.getElementsByClassName('username')[0].innerText = author || 'Anonymous';
-
-  var commentsContainer = postElement.getElementsByClassName('comments-container')[0];
-  commentsContainer.appendChild(comment);
-}
-
-/**
- * Sets the comment's values in the given postElement.
- */
-function setCommentValues(postElement, id, text, author) {
-  var comment = postElement.getElementsByClassName('comment-' + id)[0];
-  comment.getElementsByClassName('comment')[0].innerText = text;
-  comment.getElementsByClassName('fp-username')[0].innerText = author;
-}
-
-/**
- * Deletes the comment of the given ID in the given postElement.
- */
-function deleteComment(postElement, id) {
-  var comment = postElement.getElementsByClassName('comment-' + id)[0];
-  comment.parentElement.removeChild(comment);
 }
 
 /**
@@ -181,20 +148,21 @@ function startDatabaseQueries() {
   var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
   // [END my_top_posts_query]
   // [START recent_posts_query]
-    var recentPostsRef = firebase.database().ref('2015').orderByChild('Police_Force').limitToLast(30).equalTo(35); //this is cambs
+    var recentPostsRef = firebase.database().ref('2015').orderByChild('Police_Force').limitToLast(30).equalTo(dropdownVals.police); //this is cambs
   // [END recent_posts_query]
   var userPostsRef = firebase.database().ref('user-posts/' + myUserId);
 
   var fetchPosts = function(postsRef, sectionElement) {
     postsRef.on('child_added', function(data) {
       var author = data.val().author || 'Anonymous';
-      console.log(data.val());
+      //console.log(data.val());
       var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
       containerElement.insertBefore(
-          createPostElement(data.key, data.val().Number_of_Vehicles, data.val().Speed_limit, data.val().Date),
+          createPostElement(data.key, data.val().Number_of_Vehicles, data.val().Speed_limit, data.val().Date,data.val().Police_Force),
           containerElement.firstChild);
     });
     postsRef.on('child_changed', function(data) {
+      console.log('FIX ME');
 		var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
 		var postElement = containerElement.getElementsByClassName('post-' + data.key)[0];
 		postElement.getElementsByClassName('mdl-card__title-text')[0].innerText = data.val().title;
@@ -210,28 +178,16 @@ function startDatabaseQueries() {
   };
 
   // Fetching and displaying all posts of each sections.
-  fetchPosts(topUserPostsRef, topUserPostsSection);
+
   fetchPosts(recentPostsRef, recentPostsSection);
-  fetchPosts(userPostsRef, userPostsSection);
+
 
   // Keep track of all Firebase refs we are listening to.
-  listeningFirebaseRefs.push(topUserPostsRef);
+
   listeningFirebaseRefs.push(recentPostsRef);
-  listeningFirebaseRefs.push(userPostsRef);
+
 }
 
-/**
- * Writes the user's data to the database.
- */
-// [START basic_write]
-function writeUserData(userId, name, email, imageUrl) {
-  firebase.database().ref('users/' + userId).set({
-    username: name,
-    email: email,
-    profile_picture : imageUrl
-  });
-}
-// [END basic_write]
 
 /**
  * Cleanups the UI and removes all Firebase listeners.
@@ -258,14 +214,16 @@ function onAuthStateChanged(user) {
   cleanupUi();
   if (user) {
     currentUID = user.uid;
-    writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+  //  writeUserData(user.uid, user.displayName, user.email, user.photoURL);
     startDatabaseQueries();
+    populateDropdowns();
   } else {
     // Set currentUID to null.
     currentUID = null;
 
   }
 }
+
 
 /**
  * Creates a new post for the current user.
