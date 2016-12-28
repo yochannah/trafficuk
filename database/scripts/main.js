@@ -181,7 +181,7 @@ function startDatabaseQueries() {
   var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
   // [END my_top_posts_query]
   // [START recent_posts_query]
-    var recentPostsRef = firebase.database().ref('2015').limitToFirst(30);
+    var recentPostsRef = firebase.database().ref('2015').orderByChild('Police_Force').limitToLast(30).equalTo(35); //this is cambs
   // [END recent_posts_query]
   var userPostsRef = firebase.database().ref('user-posts/' + myUserId);
 
@@ -267,14 +267,12 @@ function onAuthStateChanged(user) {
   cleanupUi();
   if (user) {
     currentUID = user.uid;
-    splashPage.style.display = 'none';
     writeUserData(user.uid, user.displayName, user.email, user.photoURL);
     startDatabaseQueries();
   } else {
     // Set currentUID to null.
     currentUID = null;
-    // Display the splash page where you can sign-in.
-    splashPage.style.display = '';
+
   }
 }
 
@@ -317,11 +315,7 @@ function showSection(sectionElement, buttonElement) {
 
 // Bindings on load.
 window.addEventListener('load', function() {
-  // Bind Sign in button.
-  signInButton.addEventListener('click', function() {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider);
-  });
+
 
   // Bind Sign out button.
   signOutButton.addEventListener('click', function() {
