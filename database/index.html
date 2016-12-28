@@ -69,11 +69,18 @@
             <!-- Navigation Bar -->
             <div class="filters">
 
-                <label>Police force
-                    <select id="police">
-                        <option disabled selected>Select one</option>
-                    </select>
-                </label>
+              <label>Police force
+                  <select id="police">
+                      <option disabled selected>Select one</option>
+                  </select>
+              </label>
+
+              <label>Severity
+                  <select id="severity">
+                      <option disabled selected>Select one</option>
+                  </select>
+              </label>
+
 
             </div>
         </header>
@@ -83,8 +90,8 @@
         <div>
 
             <!-- Show a list of recent posts -->
-            <section class="accidents" id="recent-posts-list">
-                <div class="posts-container">
+            <section class="accidents" id="recent-incidents-list">
+                <div class="incidents-container">
                 </div>
             </section>
 
@@ -93,6 +100,7 @@
 
 
     <script src="scripts/main.js"></script>
+    <script src="scripts/incidentElement.js"></script>
     <script src="scripts/maps.js"></script>
 </body>
 

@@ -24,13 +24,15 @@ a {
 #mapid {
     height: 50vh;
 }
-.posts-container {
+.incidents-container {
     display: flex;
     flex-wrap: wrap;
 }
-.post {
+.incident {
     min-width: 14em;
     flex-grow: 1;
     padding: 1em;
     margin: 1em;
 }
+
+.descriptor {text-align:right;}

@@ -21,6 +21,7 @@ function addMarker(marker) {
         fillOpacity: 0.33,
         radius: 500
     }).addTo(mymap);
+    circle.bindPopup(createincidentElement(marker));
     bounds.push([lat, long]);
     markers[marker.Accident_Index] = circle;
     mymap.fitBounds(bounds);
