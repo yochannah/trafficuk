@@ -40,7 +40,6 @@ var db = {};
  * Creates a post element.
  */
 function createPostElement(postId, numVehicles, speedLimit, date, policeForce) {
-  var uid = firebase.auth().currentUser.uid;
 
   var html =
       '<div class="post post-' + postId + ' mdl-cell mdl-cell--12-col ' +
@@ -103,7 +102,9 @@ function startDatabaseQueries() {
     console.log(dropdownVals.police);
 
   var fetchPosts = function(postsRef, sectionElement) {
+    console.log("fetchposts");
     postsRef.on('child_added', function(data) {
+      console.log("child added");
       var author = data.val().author || 'Anonymous';
       var containerElement = sectionElement.getElementsByClassName('posts-container')[0];
       containerElement.insertBefore(
