@@ -162,6 +162,7 @@ function startDatabaseQueries() {
       containerElement.insertBefore(
           createPostElement(data.key, data.val().Number_of_Vehicles, data.val().Speed_limit, data.val().Date,data.val().Police_Force),
           containerElement.firstChild);
+          addMarker(data.val());
     });
     postsRef.on('child_changed', function(data) {
       console.log('FIX ME');
