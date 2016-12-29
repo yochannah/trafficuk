@@ -18,8 +18,11 @@
 var listeningFirebaseRefs = [];
 
 var dropdownVals = {police : 35};
-var db = {_filters:{}};
-var dropdowns = ["police","severity"],
+var db = {_filters:{},
+          _config: {"police" : "Police_Force",
+                    "severity" : "Severity",
+                    "1st_Road_Class" : "1st_Road_Class"}};
+var dropdowns = ["police","severity","1st_Road_Class"],
 dropdownRefs = {};
 function populateDropdowns() {
 
@@ -51,18 +54,32 @@ function populateDropdowns() {
   });
 }
 
+function setMultipleConstraints(dbref, options) {
+  var argArray = [];
+    for (var key in options) {
+        if (options.hasOwnProperty(key)) {
+            dbref = dbref.orderByChild((db._config(key)).equalTo(values[key]));
+        }
+    }
+    return dbref;
+}
+
+
 /**
  * Starts listening for new incidents and populates incidents lists.
  */
 function startDatabaseQueries() {
 
-//  var recentincidentsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(100).equalTo(db._filters.police);
-  var recentincidentsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(100);
+  var recentincidentsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(300).equalTo(db._filters.police);
+
+//  var recentincidentsRef = setMultipleConstraints(firebase.database().ref('accidents'));
+  console.log(recentincidentsRef);
+//  recentincidentsRef.equalTo(db._filters.police);
 
   var fetchAccidents = function(incidentsRef, sectionElement) {
     incidentsRef.on('child_added', function(data) {
       var author = data.val().author || 'Anonymous';
-//      console.log(data.val());
+     console.log(data.val());
       var containerElement = sectionElement.getElementsByClassName('incidents-container')[0];
       containerElement.insertBefore(
           createincidentElement(data.val()),

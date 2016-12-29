@@ -2,7 +2,7 @@
  * Creates a incident element.
  */
 function createincidentElement(data) {
-  var roads = "";
+  var roads = processRoads(data);
   var html =
     '<div class="incident incident-' + data.Accident_Index + '">' +
     '<div class="date">' + data.Date +'</div>' +
@@ -19,4 +19,30 @@ function createincidentElement(data) {
   var incidentElement = div.firstChild;
 
   return incidentElement;
+}
+
+function processRoads(data){
+  var roadclasses = db["1st_Road_Class"], //you know I named the lookup badly when it works for both roads.
+  roadClass1 = roadclasses[data["1st_Road_Class"]],
+  roadClass2 = roadclasses[data["2nd_Road_Class"]],
+  road1, road2, roads;
+
+  if ((roadClass1 == "Unclassified") || (data["1st_Road_Number"] == 0)) {
+    return "Name unknown";
+  } else {
+    road1 = roadClass1 + data["1st_Road_Number"];
+    if ((roadClass2 == "Unclassified") || (data["2nd_Road_Number"] == 0)) {
+      return road1;
+    } else {
+      return road1 + " and " + roadClass2 + data["2nd_Road_Number"];
+    }
+  }
+// :
+// 0
+// 2nd_Road_Class
+// :
+// -1
+// 2nd_Road_Number
+// :
+// 0
 }
