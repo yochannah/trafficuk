@@ -15,21 +15,6 @@
  */
 'use strict';
 
-// Shortcuts to DOM Elements.
-var messageForm = document.getElementById('message-form');
-var messageInput = document.getElementById('new-incident-message');
-var titleInput = document.getElementById('new-incident-title');
-var signInButton = document.getElementById('sign-in-button');
-var signOutButton = document.getElementById('sign-out-button');
-var splashPage = document.getElementById('page-splash');
-var addincident = document.getElementById('add-incident');
-var addButton = document.getElementById('add');
-var recentincidentsSection = document.getElementById('recent-incidents-list');
-var userincidentsSection = document.getElementById('user-incidents-list');
-var topUserincidentsSection = document.getElementById('top-user-incidents-list');
-var recentMenuButton = document.getElementById('menu-recent');
-var myincidentsMenuButton = document.getElementById('menu-my-incidents');
-var myTopincidentsMenuButton = document.getElementById('menu-my-top-incidents');
 var listeningFirebaseRefs = [];
 
 var dropdownVals = {police : 35};
@@ -46,7 +31,6 @@ function populateDropdowns() {
 
     //populate with values
     thisRef.on('child_added', function(ref) {
-      console.log('child:', dropdown, ref.val(), thisElem);
       newOption = document.createElement('option');
       newOption.innerText = ref.val();
       newOption.setAttribute("value",ref.key);
@@ -65,7 +49,6 @@ function populateDropdowns() {
 
     dropdownRefs[dropdown] = thisRef;
   });
-  console.log(dropdowns);
 }
 
 /**
@@ -73,7 +56,8 @@ function populateDropdowns() {
  */
 function startDatabaseQueries() {
 
-    var recentincidentsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(100).equalTo(db._filters.police);
+//  var recentincidentsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(100).equalTo(db._filters.police);
+  var recentincidentsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(100);
 
   var fetchAccidents = function(incidentsRef, sectionElement) {
     incidentsRef.on('child_added', function(data) {
@@ -89,10 +73,6 @@ function startDatabaseQueries() {
       console.log('FIX ME');
 		var containerElement = sectionElement.getElementsByClassName('incidents-container')[0];
 		var incidentElement = containerElement.getElementsByClassName('incident-' + data.key)[0];
-		incidentElement.getElementsByClassName('mdl-card__title-text')[0].innerText = data.val().title;
-		incidentElement.getElementsByClassName('username')[0].innerText = data.val().author;
-		incidentElement.getElementsByClassName('text')[0].innerText = data.val().body;
-		incidentElement.getElementsByClassName('star-count')[0].innerText = data.val().starCount;
     });
     incidentsRef.on('child_removed', function(data) {
       console.log('FIX ME - removed');
@@ -104,7 +84,7 @@ function startDatabaseQueries() {
   };
 
   // Fetching and displaying all incidents of each sections.
-  fetchAccidents(recentincidentsRef, recentincidentsSection);
+  fetchAccidents(recentincidentsRef, document.getElementById('recent-incidents-list'));
 
   // Keep track of all Firebase refs we are listening to.
 
@@ -113,38 +93,8 @@ function startDatabaseQueries() {
 }
 
 
-/**
- * Cleanups the UI and removes all Firebase listeners.
- */
-function cleanupUi() {
-
-}
-
 populateDropdowns();
 startDatabaseQueries();
-
-
-
-
-/**
- * Displays the given section element and changes styling of the given button.
- */
-function showSection(sectionElement, buttonElement) {
-  recentincidentsSection.style.display = 'none';
-  userincidentsSection.style.display = 'none';
-  topUserincidentsSection.style.display = 'none';
-  addincident.style.display = 'none';
-  recentMenuButton.classList.remove('is-active');
-  myincidentsMenuButton.classList.remove('is-active');
-  myTopincidentsMenuButton.classList.remove('is-active');
-
-  if (sectionElement) {
-    sectionElement.style.display = 'block';
-  }
-  if (buttonElement) {
-    buttonElement.classList.add('is-active');
-  }
-}
 
 // Bindings on load.
 window.addEventListener('load', function() {
