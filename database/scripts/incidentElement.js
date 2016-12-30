@@ -1,3 +1,5 @@
+var sevs = db["severity"];
+
 /**
  * Creates a incident element.
  */
@@ -5,7 +7,7 @@ function createincidentElement(data) {
   var roads = processRoads(data);
   var html =
     '<div class="incident incident-' + data.Accident_Index + '">' +
-    '<div class="date">' + data.Date +'</div>' +
+    '<div class="date">' + data.Date + ": " + sevs[parseInt(data.Accident_Severity,10)] + ' accident</div>' +
       '<table>' +
           '<tr><td class="descriptor">Speed limit:</td><td> ' + data.Speed_limit + '</td></tr>' +
           '<tr><td class="descriptor">Police force:</td><td> ' + db.police[parseInt(data.Police_Force,10)] + '</td></tr>' +
@@ -37,12 +39,4 @@ function processRoads(data){
       return road1 + " and " + roadClass2 + data["2nd_Road_Number"];
     }
   }
-// :
-// 0
-// 2nd_Road_Class
-// :
-// -1
-// 2nd_Road_Number
-// :
-// 0
 }

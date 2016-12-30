@@ -17,7 +17,6 @@
 
 var listeningFirebaseRefs = [];
 
-var dropdownVals = {police : 35};
 var db = {_filters:{},
           _config: {"police" : "Police_Force",
                     "severity" : "Severity",
@@ -65,12 +64,25 @@ function setMultipleConstraints(dbref, options) {
 }
 
 
+function longToRef(lat) {
+  var lat = lat.toString().split("."),
+  lats = [lat[0],
+          lat[1].substr(0,2)
+        //  ,lat.substr(5,2)
+        ];
+  return lats.join("/") + "/accidents";
+};
+//get by lat:
+
+
+
 /**
  * Starts listening for new incidents and populates incidents lists.
  */
 function startDatabaseQueries() {
-
-  var recentincidentsRef = firebase.database().ref('accidents').orderByChild('Police_Force').limitToLast(300).equalTo(db._filters.police);
+  var refstring = 'accidents/' + longToRef(-1.5252);
+  console.log(refstring);
+  var recentincidentsRef = firebase.database().ref(refstring).limitToLast(300).orderByChild("Latitude").startAt(52.7777).endAt(54.0);
 
 //  var recentincidentsRef = setMultipleConstraints(firebase.database().ref('accidents'));
   console.log(recentincidentsRef);
@@ -79,7 +91,7 @@ function startDatabaseQueries() {
   var fetchAccidents = function(incidentsRef, sectionElement) {
     incidentsRef.on('child_added', function(data) {
       var author = data.val().author || 'Anonymous';
-     console.log(data.val());
+     console.log(data.val().Longitude);
       var containerElement = sectionElement.getElementsByClassName('incidents-container')[0];
       containerElement.insertBefore(
           createincidentElement(data.val()),
