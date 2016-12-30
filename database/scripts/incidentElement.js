@@ -13,6 +13,8 @@ function createincidentElement(data) {
           '<tr><td class="descriptor">Police force:</td><td> ' + db.police[parseInt(data.Police_Force,10)] + '</td></tr>' +
           '<tr><td class="descriptor"># of vehicles:</td><td> ' + data.Number_of_Vehicles + '</td></tr>' +
           '<tr><td class="descriptor">Roads:</td><td> ' + roads + '</td></tr>' +
+          '<tr><td class="descriptor">Lat</td><td> ' + data.Latitude + '</td></tr>' +
+          '<tr><td class="descriptor">Long:</td><td> ' + data.Longitude + '</td></tr>' +
       '</table>' + '</div>';
 
   // Create the DOM element from the HTML.

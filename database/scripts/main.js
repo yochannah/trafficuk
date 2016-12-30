@@ -21,35 +21,35 @@ var db = {_filters:{},
           _config: {"police" : "Police_Force",
                     "severity" : "Severity",
                     "1st_Road_Class" : "1st_Road_Class"}};
-var dropdowns = ["police","severity","1st_Road_Class"],
-dropdownRefs = {};
-function populateDropdowns() {
+var dbFields = ["police","severity","1st_Road_Class"],
+fieldRefs = {};
+function populateDb() {
 
-  dropdowns.map(function(dropdown){
+  dbFields.map(function(field){
     var thisRef, thisElem, newOption;
-    thisRef = firebase.database().ref(dropdown);
-    thisElem = document.getElementById(dropdown);
-    db[dropdown] = {};
+    thisRef = firebase.database().ref(field);
+    thisElem = document.getElementById(field);
+    db[field] = {};
 
     //populate with values
-    thisRef.on('child_added', function(ref) {
-      newOption = document.createElement('option');
-      newOption.innerText = ref.val();
-      newOption.setAttribute("value",ref.key);
-      thisElem.appendChild(newOption);
-      db[dropdown][ref.key] = ref.val();
+     thisRef.on('child_added', function(ref) {
+    //   newOption = document.createElement('option');
+    //   newOption.innerText = ref.val();
+    //   newOption.setAttribute("value",ref.key);
+    //   thisElem.appendChild(newOption);
+       db[field][ref.key] = ref.val();
     });
 
     //listen for changes:
-    thisElem.addEventListener("change",function (e){
-      listeningFirebaseRefs.map(function(ref){ ref.off();});
-      removeAllMarkers();
-//      dropdownVals[dropdown] = parseInt(e.target[e.target.selectedIndex].value,10);
-      db._filters[dropdown] = parseInt(e.target[e.target.selectedIndex].value,10)
-      startDatabaseQueries();
-    });
+//    thisElem.addEventListener("change",function (e){
+//      listeningFirebaseRefs.map(function(ref){ ref.off();});
+//      removeAllMarkers();
+//      fieldVals[field] = parseInt(e.target[e.target.selectedIndex].value,10);
+//      db._filters[field] = parseInt(e.target[e.target.selectedIndex].value,10)
+//      startDatabaseQueries();
+//    });
 
-    dropdownRefs[dropdown] = thisRef;
+//    fieldRefs[field] = thisRef;
   });
 }
 
@@ -66,8 +66,8 @@ function setMultipleConstraints(dbref, options) {
 
 function longToRef(lat) {
   var lat = lat.toString().split("."),
-  lats = [lat[0],
-          lat[1].substr(0,2)
+  lats = [lat[0]
+        //  ,lat[1].substr(0,2)
         //  ,lat.substr(5,2)
         ];
   return lats.join("/") + "/accidents";
@@ -80,18 +80,13 @@ function longToRef(lat) {
  * Starts listening for new incidents and populates incidents lists.
  */
 function startDatabaseQueries() {
-  var refstring = 'accidents/' + longToRef(-1.5252);
+  var bounds = getBounds();
+  var refstring = 'accidents/' + bounds.bucket + "/accidents";
   console.log(refstring);
-  var recentincidentsRef = firebase.database().ref(refstring).limitToLast(300).orderByChild("Latitude").startAt(52.7777).endAt(54.0);
-
-//  var recentincidentsRef = setMultipleConstraints(firebase.database().ref('accidents'));
-  console.log(recentincidentsRef);
-//  recentincidentsRef.equalTo(db._filters.police);
+  var recentincidentsRef = firebase.database().ref(refstring).orderByChild("Latitude").startAt(bounds.startAt).endAt(bounds.endAt);
 
   var fetchAccidents = function(incidentsRef, sectionElement) {
     incidentsRef.on('child_added', function(data) {
-      var author = data.val().author || 'Anonymous';
-     console.log(data.val().Longitude);
       var containerElement = sectionElement.getElementsByClassName('incidents-container')[0];
       containerElement.insertBefore(
           createincidentElement(data.val()),
@@ -122,7 +117,7 @@ function startDatabaseQueries() {
 }
 
 
-populateDropdowns();
+populateDb();
 startDatabaseQueries();
 
 // Bindings on load.
