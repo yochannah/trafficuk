@@ -17,12 +17,19 @@
 html, body {
     font-family: 'Roboto', 'Helvetica', sans-serif;
 }
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 a {
     text-decoration: underline;
     color: #039BE5;
 }
 #mapid {
     height: 50vh;
+    width: 800px;
 }
 .incidents-container {
     display: flex;
@@ -34,5 +41,33 @@ a {
     padding: 1em;
     margin: 1em;
 }
-
-.descriptor {text-align:right;}
+.descriptor {
+    text-align: right;
+}
+#locationform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#locationform input, #locationform button {
+    font-size: 0.7em;
+    height: 2em;
+    margin: 0;
+    border: solid 1px #ccc;
+    padding: 0;
+    border-radius: 2px;
+}
+#locationform button {
+    height: 2.2em;
+    min-width: 10vw;
+    margin-left: 1em;
+    background-color: #ddd;
+}
+#locationform input {
+    min-width: 33vw;
+    margin-left: 1em;
+}
+#locationform {
+    margin: 1em;
+    font-size: 1.2em;
+}

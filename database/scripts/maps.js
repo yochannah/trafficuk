@@ -1,4 +1,6 @@
-var mymap = L.map('mapid').setView([53.382121, -1.467878], 10);
+
+
+var mymap = L.map('mapid').setView([53.382121, -1.467878], 12);
 L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoieW9jaGFubmFoIiwiYSI6Iko5TU1xcW8ifQ.AlR1faR7rfR1CoJRyIPEAg', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18,
@@ -24,7 +26,7 @@ function addMarker(marker) {
         weight:1,
         opacity:0.5,
         fillOpacity: 0.33,
-        radius: 500
+        radius: 200
     }).addTo(mymap);
     circle.bindPopup(createincidentElement(marker));
     //bounds.push([lat, long]);
@@ -51,6 +53,10 @@ function getBounds() {
     endAt: b._northEast.lat,
     bucket : mymap.getCenter().lng.toString().split(".")[0]
   }
+}
+
+function centerMap(lat, long){
+  mymap.panTo([lat,long]);
 }
 
 mymap.on('zoomend', function(){

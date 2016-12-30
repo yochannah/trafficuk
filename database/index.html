@@ -62,35 +62,18 @@
 </head>
 
 <body>
-    <!-- Header section containing logo and menu -->
-    <header class="header mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
 
-
-        <!-- Navigation Bar -->
-        <!--div class="filters">
-
-            <label>Police force
-                <select id="police">
-                    <option disabled selected>Select one</option>
-                </select>
-            </label>
-
-            <label>Severity
-                <select id="severity">
-                    <option disabled selected>Select one</option>
-                </select>
-            </label>
-            <label>
-                1st_Road_Class
-                <select id="1st_Road_Class">
-                    <option disabled selected>Select one</option>
-                </select>
-            </label>
-
-        </div-->
-    </header>
     <main>
         <div id="mapid"></div>
+
+        <form id="locationform">
+            <label>Search for a location:
+                <input type="text" id="searchFor" />
+            </label>
+            <button>Search</button>
+        </form>
+
+
 
         <div>
 
@@ -105,6 +88,7 @@
 
 
     <script src="scripts/maps.js"></script>
+    <script src="scripts/httpclient.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/incidentElement.js"></script>
 </body>
