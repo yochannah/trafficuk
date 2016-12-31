@@ -102,6 +102,13 @@ h1 {
 #locationform label {
   font-size: 1.2em;
 }
+#status {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 0.25em 1em;
+  font-size: 0.8em;
+  text-align: center;
+}
 footer {
   padding: 1em 2em;
   transition: all 0.5s;
