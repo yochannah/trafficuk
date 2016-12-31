@@ -18,19 +18,27 @@ function addMarker(marker) {
     //assume array of objs with lats and longs and other fun stuff
     var lat = marker.Latitude,
         long = marker.Longitude,
-        sev = parseInt(marker.Accident_Severity, 10);
-        //only add markers if they haven't already been added.
-    if (!markers[marker.Accident_Index]) {
+        sev = parseInt(marker.Accident_Severity, 10),
+        bounds = mymap.getBounds(),
+        zoomLevel = mymap.getZoom(),
+        //only add markers if they haven't already been added
+        isNewMarker = (!markers[marker.Accident_Index]),
+        //we don't want to waste resources adding markers we can't see anyway.
+        isInCurrentView = bounds.contains([lat,long]);
+    if (isNewMarker && isInCurrentView) {
         var circle = L.circle([lat, long], {
             fillColor: colors[sev],
             color: colors[sev],
             weight: 1,
             opacity: 0.5,
             fillOpacity: 0.33,
-            radius: 200
+            radius: (1000 / mymap.getZoom())
         }).addTo(mymap);
         circle.bindPopup(createincidentElement(marker));
         markers[marker.Accident_Index] = circle;
+    }
+    if(Object.keys(markers).length >= 3000) {
+      setStatus("Heavy crash area. Showing first " + 3000 + ". Consider zooming in.","Warning");
     }
 }
 
@@ -54,9 +62,16 @@ function getBounds() {
     }
 }
 
-function centerMap(lat, long) {
+function centerMap(lat, long, zoomin) {
     mymap.panTo([lat, long]);
+    if (zoomin) {
+    mymap.setZoom(14);
+  } else {
+    mymap.setZoom(12);
+
+  }
 }
+
 
 mymap.on('zoomend', function() {
     startDatabaseQueries();

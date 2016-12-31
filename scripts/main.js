@@ -75,30 +75,22 @@ function longToRef(lat) {
  */
 function startDatabaseQueries() {
     showLoading();
-    var bounds = getBounds();
-    var refstring = 'accidents/' + bounds.bucket + "/accidents";
-    var recentincidentsRef = firebase.database().ref(refstring).orderByChild("Latitude").startAt(bounds.startAt).endAt(bounds.endAt).limitToFirst(2000);
+    var bounds = getBounds(),
+    numToShow = 3000,
+    refstring = 'accidents/' + bounds.bucket + "/accidents",
+    recentincidentsRef = firebase.database().ref(refstring).orderByChild("Latitude").startAt(bounds.startAt).endAt(bounds.endAt).limitToFirst(numToShow);
 
     var fetchAccidents = function(incidentsRef, sectionElement) {
         incidentsRef.on('child_added', function(data) {
-            // var containerElement = sectionElement.getElementsByClassName('incidents-container')[0];
-            // containerElement.insertBefore(
-            //     createincidentElement(data.val()),
-            //     containerElement.firstChild);
             addMarker(data.val());
             hideLoading();
         });
         incidentsRef.on('child_changed', function(data) {
-            console.log('FIX ME');
-            var containerElement = sectionElement.getElementsByClassName('incidents-container')[0];
-            var incidentElement = containerElement.getElementsByClassName('incident-' + data.key)[0];
+          removeMarker(data.val());
+          addMarker(data.val());
         });
         incidentsRef.on('child_removed', function(data) {
-            console.log('FIX ME - removed');
             removeMarker(data.val());
-            var containerElement = sectionElement.getElementsByClassName('incidents-container')[0];
-            var incident = containerElement.getElementsByClassName('incident-' + data.key)[0];
-            incident.parentElement.removeChild(incident);
         });
     };
 
@@ -124,24 +116,28 @@ document.getElementById('locationform').addEventListener('submit', function(e) {
         new HttpClient().get("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchFor + ",%20uk&key=AIzaSyD3a2w_kFitqdFEbzFUgPX5rEJQRmh31e8", function(response) {
             response = JSON.parse(response);
             if (response.status === "OK") {
-                var location = response.results[0].geometry.location;
-                centerMap(location.lat, location.lng);
+              console.log(response.results[0]);
+              var zoomin = (response.results[0].formatted_address.indexOf("London") >= 0),
+               location = response.results[0].geometry.location;
+                centerMap(location.lat, location.lng, zoomin);
                 setStatus("Showing results for '" + searchFor + "'");
-                console.log('country', response.results[0].address_components, response);
+                if (response.results.length > 1) {
+                    console.log(response.results);
+                }
             } else {
                 if (response.status === "ZERO_RESULTS") {
-                    setStatus("No results returned for '" + searchFor + ", UK'","error");
+                    setStatus("No results returned for '" + searchFor + ", UK'", "error");
                     hideLoading();
                     console.debug(response);
                 } else {
-                    setStatus("I don't know what happened just there but it wasn't good.","error");
+                    setStatus("I don't know what happened just there but it wasn't good.", "error");
                     hideLoading();
                     console.error("uhoh, some weird-ass unexpected condition occurred", response);
                 }
             }
         });
     } else {
-        setStatus("Type something in the searchbox first, silly bear!","error");
+        setStatus("Type something in the searchbox first, silly bear!", "error");
         hideLoading();
     }
 });
@@ -155,11 +151,11 @@ function hideLoading() {
 }
 
 function setStatus(theHtml, state) {
-  var status = document.getElementById("status");
+    var status = document.getElementById("status");
     status.innerHTML = theHtml;
-    if(state) {
-      status.className = state;
+    if (state) {
+        status.className = state;
     } else {
-      status.className = "";
+        status.className = "";
     }
 }
