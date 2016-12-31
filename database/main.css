@@ -16,11 +16,19 @@
 
 html, body {
     font-family: 'Roboto', 'Helvetica', sans-serif;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 }
-main {
+body {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+}
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
 }
 a {
@@ -30,6 +38,9 @@ a {
 #mapid {
     height: 50vh;
     width: 800px;
+}
+@media (max-width : 800px) {
+  #mapid {width:100%}
 }
 .incidents-container {
     display: flex;
@@ -71,3 +82,23 @@ a {
     margin: 1em;
     font-size: 1.2em;
 }
+footer {
+    padding: 1em 2em;
+    font-size:0.9em;
+    background: #556;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    color: #eee;
+    box-shadow:inset 0px 1px 3px rgba(30,30,30,0.3);
+    border-top:solid 1px #666;
+}
+
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.icon-compass2 {height:3em;width:3em;display:inline;float:left; margin-right:1em; stroke-width:1;stroke:rgba(0,0,0,0.3);}
