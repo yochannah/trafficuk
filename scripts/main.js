@@ -118,25 +118,32 @@ startDatabaseQueries();
 // Bindings on load.
 document.getElementById('locationform').addEventListener('submit', function(e) {
     e.preventDefault();
-    showLoading();
     var searchFor = e.target.searchFor.value;
-    new HttpClient().get("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchFor + ",%20uk&key=AIzaSyD3a2w_kFitqdFEbzFUgPX5rEJQRmh31e8", function(response) {
-        response = JSON.parse(response);
-        if (response.status === "OK") {
-            var location = response.results[0].geometry.location;
-            centerMap(location.lat, location.lng);
-            setStatus("Showing results for '" + searchFor + "'");
-            console.log('country', response.results[0].address_components);
-        } else {
-          if(response.status === "OK") {
-            setStatus("No results returned for '" + searchFor + "', UK");
-            hideLoading();
-            console.debug(response);
-          } else {
-            console.error("uhoh, some weird-ass unexpected condition occurred", response)
-          }
-        }
-    })
+    if (searchFor.trim() !== "") {
+        showLoading();
+        new HttpClient().get("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchFor + ",%20uk&key=AIzaSyD3a2w_kFitqdFEbzFUgPX5rEJQRmh31e8", function(response) {
+            response = JSON.parse(response);
+            if (response.status === "OK") {
+                var location = response.results[0].geometry.location;
+                centerMap(location.lat, location.lng);
+                setStatus("Showing results for '" + searchFor + "'");
+                console.log('country', response.results[0].address_components, response);
+            } else {
+                if (response.status === "ZERO_RESULTS") {
+                    setStatus("No results returned for '" + searchFor + ", UK'","error");
+                    hideLoading();
+                    console.debug(response);
+                } else {
+                    setStatus("I don't know what happened just there but it wasn't good.","error");
+                    hideLoading();
+                    console.error("uhoh, some weird-ass unexpected condition occurred", response);
+                }
+            }
+        });
+    } else {
+        setStatus("Type something in the searchbox first, silly bear!","error");
+        hideLoading();
+    }
 });
 
 function showLoading() {
@@ -147,6 +154,12 @@ function hideLoading() {
     document.getElementById("loader").className = "inactive";
 }
 
-function setStatus(theHtml) {
-    document.getElementById("status").innerHTML = theHtml;
+function setStatus(theHtml, state) {
+  var status = document.getElementById("status");
+    status.innerHTML = theHtml;
+    if(state) {
+      status.className = state;
+    } else {
+      status.className = "";
+    }
 }

@@ -110,6 +110,9 @@ h1 {
     padding: @spacer/4 @spacer;
     font-size: 0.8em;
     text-align: center;
+    &.error {
+        background-color: rgba(255,0,0,0.2 );
+    }
 }
 footer {
     padding: @spacer 2em;
@@ -155,15 +158,20 @@ footer {
     .supplementary {
         transition: all 0.5s;
         flex-direction: column;
-        border: solid 1px red;
         width: 100%;
         .severitylegend {
             transition: all 0.5s;
             order: 2;
+            flex-direction: row;
+            flex-wrap: wrap;
+            font-size: 0.8em;
             padding: @spacer;
-            min-height: 100px;
+            min-height: 1.5*@spacer;
             h3 {
-                font-size: 0.8em;
+                display: none;
+            }
+            .legend {
+                flex-grow: 1;
             }
         }
         #locationform {

@@ -109,6 +109,9 @@ h1 {
   font-size: 0.8em;
   text-align: center;
 }
+#status.error {
+  background-color: rgba(255, 0, 0, 0.2);
+}
 footer {
   padding: 1em 2em;
   transition: all 0.5s;
@@ -152,17 +155,22 @@ footer {
   .supplementary {
     transition: all 0.5s;
     flex-direction: column;
-    border: solid 1px red;
     width: 100%;
   }
   .supplementary .severitylegend {
     transition: all 0.5s;
     order: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 0.8em;
     padding: 0.5em;
-    min-height: 100px;
+    min-height: 0.75em;
   }
   .supplementary .severitylegend h3 {
-    font-size: 0.8em;
+    display: none;
+  }
+  .supplementary .severitylegend .legend {
+    flex-grow: 1;
   }
   .supplementary #locationform {
     transition: all 0.5s;
