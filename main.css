@@ -242,7 +242,7 @@ footer {
   text-shadow: 1px 1px 3px #fff;
   position: fixed;
   top: 2em;
-  z-index: 1000;
+  z-index: 999;
   width: 800px;
   text-align: center;
   animation-timing-function: ease-in;
