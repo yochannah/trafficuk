@@ -97,6 +97,7 @@ h1 {
     }
     input {
         min-width: 33vw;
+        padding-left: @spacer;
     }
     label {
         font-size: 1.2em;
@@ -142,6 +143,7 @@ footer {
 @media (max-width: 600px) {
      @spacer: 0.5em;
     .supplementary {
+        max-height: 400px;
         transition: all 0.5s;
         flex-direction: column;
         border: solid 1px red;
@@ -160,9 +162,12 @@ footer {
 .severitylegend {
     transition: all 0.5s;
     border: solid 1px #ccc;
+    justify-content: space-between;
     background-color: rgba(0, 0, 0, 0.04);
     border-radius: 2px;
     padding: @spacer @spacer*2;
+    display: flex;
+    flex-direction: column;
     margin: @spacer;
     .legend {
         line-height: @spacer;

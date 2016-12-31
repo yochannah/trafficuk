@@ -96,6 +96,7 @@ h1 {
 }
 #locationform input {
   min-width: 33vw;
+  padding-left: 1em;
 }
 #locationform label {
   font-size: 1.2em;
@@ -139,6 +140,7 @@ footer {
 }
 @media (max-width: 600px) {
   .supplementary {
+    max-height: 400px;
     transition: all 0.5s;
     flex-direction: column;
     border: solid 1px red;
@@ -157,9 +159,12 @@ footer {
 .severitylegend {
   transition: all 0.5s;
   border: solid 1px #ccc;
+  justify-content: space-between;
   background-color: rgba(0, 0, 0, 0.04);
   border-radius: 2px;
   padding: 1em 2em;
+  display: flex;
+  flex-direction: column;
   margin: 1em;
 }
 .severitylegend .legend {
