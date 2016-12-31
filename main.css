@@ -97,6 +97,7 @@ h1 {
 #locationform input {
   min-width: 33vw;
   padding-left: 1em;
+  margin: 2em 0;
 }
 #locationform label {
   font-size: 1.2em;
