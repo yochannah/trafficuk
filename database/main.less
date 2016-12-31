@@ -135,6 +135,9 @@ footer {
     > * {
         min-width: 220px;
     }
+    > #status.inactive {
+        min-width: 0;
+    }
 }
 @media (max-width: 600px) {
      @spacer: 0.5em;
@@ -192,4 +195,19 @@ footer {
         text-align: center;
         font-weight: bolder;
     }
+}
+#loader {
+    text-transform: uppercase;
+    font-size: 3em;
+    display: block;
+    &.inactive {
+        display: none;
+    }
+    color: #666;
+    text-shadow: 1px 1px 3px #fff;
+    position: fixed;
+    top: 2em;
+    z-index: 1000;
+    width: 800px;
+    text-align: center;
 }

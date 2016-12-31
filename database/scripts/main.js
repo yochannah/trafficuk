@@ -74,10 +74,10 @@ function longToRef(lat) {
  * Starts listening for new incidents and populates incidents lists.
  */
 function startDatabaseQueries() {
+    showLoading();
     var bounds = getBounds();
     var refstring = 'accidents/' + bounds.bucket + "/accidents";
-    console.log(refstring);
-    var recentincidentsRef = firebase.database().ref(refstring).orderByChild("Latitude").startAt(bounds.startAt).endAt(bounds.endAt).limitToFirst(1000);
+    var recentincidentsRef = firebase.database().ref(refstring).orderByChild("Latitude").startAt(bounds.startAt).endAt(bounds.endAt).limitToFirst(2000);
 
     var fetchAccidents = function(incidentsRef, sectionElement) {
         incidentsRef.on('child_added', function(data) {
@@ -86,6 +86,7 @@ function startDatabaseQueries() {
             //     createincidentElement(data.val()),
             //     containerElement.firstChild);
             addMarker(data.val());
+            hideLoading();
         });
         incidentsRef.on('child_changed', function(data) {
             console.log('FIX ME');
@@ -117,6 +118,7 @@ startDatabaseQueries();
 // Bindings on load.
 document.getElementById('locationform').addEventListener('submit', function(e) {
     e.preventDefault();
+    showLoading();
     var searchFor = e.target.searchFor.value;
      new HttpClient().get("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchFor +"&key=AIzaSyD3a2w_kFitqdFEbzFUgPX5rEJQRmh31e8", function(response) {
          response = JSON.parse(response);
@@ -124,3 +126,12 @@ document.getElementById('locationform').addEventListener('submit', function(e) {
          centerMap(location.lat,location.lng);
      })
 });
+
+function showLoading(){
+  console.log("showing loader");
+  document.getElementById("loader").className = "loading";
+}
+function hideLoading(){
+  console.log("hiding loader");
+  document.getElementById("loader").className = "inactive";
+}
