@@ -76,30 +76,24 @@
         <h1>UK Traffic Accidents 2015</h1>
         <div id="mapid"></div>
 
-        <form id="locationform">
-            <label>Search for a location:
-                <input type="text" id="searchFor" />
-            </label>
-            <button>Search</button>
-        </form>
-
-
-
-        <div>
-
-            <!-- Show a list of recent posts -->
-            <section class="accidents" id="recent-incidents-list">
-                <div class="incidents-container">
-                </div>
-            </section>
-
+        <div class="supplementary">
+            <div class="severitylegend"><h3>Legend</h3>
+                <div class="fatal legend">Fatal accident</div>
+                <div class="severe legend">Severe accident</div>
+                <div class="slight legend">Slight accident</div>
+            </div>
+            <form id="locationform">
+                <label for="searchFor">Search for a location:</label>
+                    <input type="text" id="searchFor" />
+                <button>Search</button>
+            </form>
         </div>
     </main>
     <footer>
         <svg class="icon icon-compass2">
             <use xlink:href="#icon-compass2"></use>
-        </svg> Acknowledgements: Data is for the UK in 2015, from <a href="https://data.gov.uk/dataset/road-accidents-safety-data">data.gov.uk</a>. Map via <a href="http://leafletjs.com/">Leaflet</a> with <a href="https://www.mapbox.com/">Mapbox</a> tiles, data
-        served via <a href="https://www.firebase.com/">firebase</a>, geocoding (location search) via <a href="https://developers.google.com/maps/documentation/javascript/geocoding">Google</a>. Code by <a href="http://www.twitter.com/yoyehudi">Yo Yehudi</a></footer>
+        </svg> <p>Acknowledgements: Data is for the UK in 2015, from <a href="https://data.gov.uk/dataset/road-accidents-safety-data">data.gov.uk</a>. Map via <a href="http://leafletjs.com/">Leaflet</a> with <a href="https://www.mapbox.com/">Mapbox</a> tiles, data
+        served via <a href="https://www.firebase.com/">firebase</a>, geocoding (location search) via <a href="https://developers.google.com/maps/documentation/javascript/geocoding">Google</a>. SVG icons via <a href="https://icomoon.io">icomoon</a>. Created by <a href="http://www.twitter.com/yoyehudi">Yo Yehudi</a></p></footer>
 
     <script src="scripts/maps.js"></script>
     <script src="scripts/httpclient.js"></script>
