@@ -128,10 +128,8 @@ document.getElementById('locationform').addEventListener('submit', function(e) {
 });
 
 function showLoading(){
-  console.log("showing loader");
   document.getElementById("loader").className = "loading";
 }
 function hideLoading(){
-  console.log("hiding loader");
   document.getElementById("loader").className = "inactive";
 }

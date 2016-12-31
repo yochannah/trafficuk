@@ -197,6 +197,8 @@ footer {
   text-transform: uppercase;
   font-size: 3em;
   display: block;
+  transition: all 0.2s;
+  opacity: 1;
   color: #666;
   text-shadow: 1px 1px 3px #fff;
   position: fixed;
@@ -204,7 +206,41 @@ footer {
   z-index: 1000;
   width: 800px;
   text-align: center;
+  animation-timing-function: ease-in;
+  animation-duration: 7s;
+  animation-name: pulse;
+  animation-iteration-count: infinite;
 }
 #loader.inactive {
-  display: none;
+  transition: all 1s;
+  opacity: 0;
+}
+@keyframes pulse {
+  0% {
+    font-size: 2em;
+    color: rgba(63, 81, 181, 0.5);
+  }
+  15% {
+    color: rgba(156, 39, 176, 0.5);
+  }
+  30% {
+    color: rgba(233, 30, 99, 0.5);
+  }
+  45% {
+    color: rgba(255, 87, 34, 0.5);
+  }
+  60% {
+    font-size: 2.2em;
+    color: rgba(255, 193, 7, 0.5);
+  }
+  75% {
+    color: rgba(139, 195, 74, 0.5);
+  }
+  90% {
+    color: rgba(0, 188, 212, 0.5);
+  }
+  100% {
+    color: rgba(63, 81, 181, 0.5);
+    font-size: 2em;
+  }
 }

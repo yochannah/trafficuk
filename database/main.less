@@ -200,8 +200,11 @@ footer {
     text-transform: uppercase;
     font-size: 3em;
     display: block;
+    transition: all 0.2s;
+    opacity: 1;
     &.inactive {
-        display: none;
+        transition: all 1s;
+        opacity: 0;
     }
     color: #666;
     text-shadow: 1px 1px 3px #fff;
@@ -210,4 +213,46 @@ footer {
     z-index: 1000;
     width: 800px;
     text-align: center;
+    animation-timing-function: ease-in;
+    animation-duration: 7s;
+    animation-name: pulse;
+    animation-iteration-count: infinite;
+}
+//.one {border:solid 1px transparent}
+@zebracolor: #FF5722;
+@yeastcolor: #FFC107;
+@humancolor: #8BC34A;
+@wormcolor: #3F51B5;
+@mousecolor: #00BCD4;
+@ratcolor: #E91E63;
+@flycolor: #9C27B0;
+@keyframes pulse {
+     @fadeby: 50%;
+    0% {
+        font-size: 2em;
+        color: fadeout(@wormcolor, @fadeby);
+    }
+    15% {
+        color: fadeout(@flycolor, @fadeby);
+    }
+    30% {
+        color: fadeout(@ratcolor, @fadeby);
+    }
+    45% {
+        color: fadeout(@zebracolor, @fadeby);
+    }
+    60% {
+        font-size: 2.2em;
+        color: fadeout(@yeastcolor, @fadeby);
+    }
+    75% {
+        color: fadeout(@humancolor, @fadeby);
+    }
+    90% {
+        color: fadeout(@mousecolor, @fadeby);
+    }
+    100% {
+        color: fadeout(@wormcolor, @fadeby);
+        font-size: 2em;
+    }
 }
