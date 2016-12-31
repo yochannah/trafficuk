@@ -132,6 +132,8 @@ footer {
 .supplementary {
   display: flex;
   padding: 1em;
+  max-height: 400px;
+  justify-content: stretch;
 }
 .supplementary > * {
   min-width: 220px;
@@ -141,7 +143,6 @@ footer {
 }
 @media (max-width: 600px) {
   .supplementary {
-    max-height: 400px;
     transition: all 0.5s;
     flex-direction: column;
     border: solid 1px red;
@@ -151,10 +152,27 @@ footer {
     transition: all 0.5s;
     order: 2;
     padding: 0.5em;
+    min-height: 100px;
   }
-  .supplementary form {
+  .supplementary .severitylegend h3 {
+    font-size: 0.8em;
+  }
+  .supplementary #locationform {
     transition: all 0.5s;
     order: 1;
+  }
+  .supplementary #locationform input {
+    margin: 0.5em 0;
+  }
+  .supplementary #locationform button,
+  .supplementary #locationform input {
+    min-height: 2em;
+    height: 2em;
+    transition: all 0.5s;
+  }
+  footer {
+    font-size: 0.8em;
+    padding: 0.5em;
   }
 }
 .severitylegend {
@@ -166,7 +184,7 @@ footer {
   padding: 1em 2em;
   display: flex;
   flex-direction: column;
-  margin: 1em;
+  margin: 0 1em;
 }
 .severitylegend .legend {
   line-height: 1em;
