@@ -129,8 +129,6 @@ function pruneOldMarkers(maxMarkersToShow) {
     });
     if (Object.keys(markers).length >= maxMarkersToShow) {
         setStatus("Heavy crash area. Showing first " + maxMarkersToShow + ". Consider zooming in.", "Warning");
-    } else {
-      setStatus("","");
     }
     console.log('current live markers:', Object.keys(markers).length);
 }
