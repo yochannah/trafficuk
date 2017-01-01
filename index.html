@@ -28,7 +28,7 @@
     <meta name="application-name" content="Firebase Database Quickstart">
     <meta name="theme-color" content="#303F9F">
     <link rel="shortcut icon" href="/location2.png">
-<link rel="icon" href="/location2.png">
+    <link rel="icon" href="/location2.png">
 
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -80,14 +80,15 @@
         <div id="loader">Loading...</div>
         <div id="status" class="inactive">Status: Currently showing 'Sheffield, UK'</div>
         <div class="supplementary">
-            <div class="severitylegend"><h3>Legend</h3>
+            <div class="severitylegend">
+                <h3>Legend</h3>
                 <div class="fatal legend">Fatal accident</div>
                 <div class="severe legend">Severe accident</div>
                 <div class="slight legend">Slight accident</div>
             </div>
             <form id="locationform">
                 <label for="searchFor">Search for a location:</label>
-                    <input type="text" id="searchFor" placeholder="Stuck? Try Glasgow or Betws-y-coed"/>
+                <input type="text" id="searchFor" placeholder="Stuck? Try Glasgow or Betws-y-coed" />
                 <button>Search</button>
             </form>
         </div>
@@ -95,13 +96,32 @@
     <footer>
         <svg class="icon icon-compass2">
             <use xlink:href="#icon-compass2"></use>
-        </svg> <p>Acknowledgements: Data is for the UK in 2015, from <a href="https://data.gov.uk/dataset/road-accidents-safety-data">data.gov.uk</a>. Map via <a href="http://leafletjs.com/">Leaflet</a> with <a href="https://www.mapbox.com/">Mapbox</a> tiles, data
-        served via <a href="https://www.firebase.com/">firebase</a>, geocoding (location search) via <a href="https://developers.google.com/maps/documentation/javascript/geocoding">Google</a>. SVG icons via <a href="https://icomoon.io">icomoon</a>. Created by <a href="http://www.twitter.com/yoyehudi">Yo Yehudi</a></p></footer>
+        </svg>
+        <p>Acknowledgements: Data is for the UK in 2015, from <a href="https://data.gov.uk/dataset/road-accidents-safety-data">data.gov.uk</a>. Map via <a href="http://leafletjs.com/">Leaflet</a> with <a href="https://www.mapbox.com/">Mapbox</a> tiles, data
+            served via <a href="https://www.firebase.com/">firebase</a>, geocoding (location search) via <a href="https://developers.google.com/maps/documentation/javascript/geocoding">Google</a>. SVG icons via <a href="https://icomoon.io">icomoon</a>.
+            Created by <a href="http://www.twitter.com/yoyehudi">Yo Yehudi</a></p>
+    </footer>
 
     <script src="scripts/maps.js"></script>
     <script src="scripts/httpclient.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/incidentElement.js"></script>
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-89672845-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </body>
 
 </html>
