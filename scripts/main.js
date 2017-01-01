@@ -92,6 +92,9 @@ function startDatabaseQueries() {
         incidentsRef.on('child_removed', function(data) {
             removeMarker(data.val());
         });
+        incidentsRef.on('value', function(){
+          pruneOldMarkers(numToShow);
+        });
     };
 
     // Fetching and displaying all incidents of each sections.

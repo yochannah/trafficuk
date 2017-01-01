@@ -253,6 +253,7 @@ footer {
 #loader.inactive {
   transition: all 1s;
   opacity: 0;
+  z-index: -10;
 }
 @keyframes pulse {
   0% {

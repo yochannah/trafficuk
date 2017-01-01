@@ -37,19 +37,16 @@ function addMarker(marker) {
         circle.bindPopup(createincidentElement(marker));
         markers[marker.Accident_Index] = circle;
     }
-    if(Object.keys(markers).length >= 3000) {
-      setStatus("Heavy crash area. Showing first " + 3000 + ". Consider zooming in.","Warning");
-    }
 }
 
-function removeMarker(marker) {
+function removeMarker(marker, k) {
     mymap.removeLayer(marker);
-    delete markers[marker];
+    delete markers[k];
 }
 
 function removeAllMarkers() {
     for (marker in markers) {
-        removeMarker(markers[marker]);
+        removeMarker(markers[marker], marker);
     }
 }
 
@@ -84,3 +81,17 @@ mymap.on('dragend', function() {
 mymap.on('viewreset', function() {
     startDatabaseQueries();
 });
+
+function pruneOldMarkers(maxMarkersToShow){
+  var bounds = mymap.getBounds(),
+  markerKeys = Object.keys(markers);
+  markerKeys.map(function(k) {
+    if(!bounds.contains(markers[k].getLatLng())) {
+      removeMarker(markers[k],k);
+    }
+  });
+  if(Object.keys(markers).length >= maxMarkersToShow) {
+    setStatus("Heavy crash area. Showing first " + maxMarkersToShow + ". Consider zooming in.","Warning");
+  }
+  console.log('current live markers:', Object.keys(markers).length );
+}
